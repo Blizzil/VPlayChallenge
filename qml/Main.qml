@@ -22,6 +22,7 @@ GameWindow {
     // menu scene
     MenuScene {
         id: menuScene
+
         // listen to the button signals of the scene and change the state according to it
         onSelectLevelPressed: window.state = "selectLevel"
         onCreditsPressed: window.state = "credits"

@@ -10,20 +10,27 @@ SceneBase {
     // signal indicating that the creditsScene should be displayed
     signal creditsPressed
 
-    // background
-    Rectangle {
-        anchors.fill: parent.gameWindowAnchorItem
-        color: "#47688e"
+//    // background
+//    Rectangle {
+//        anchors.fill: parent.gameWindowAnchorItem
+//        color: "#47688e"
+//    }
+
+    Image {
+        source: "../../assets/img/MainMenu.png"
+        anchors.horizontalCenter: menuScene.horizontalCenter
+        width: 480
+        height: 320
     }
 
-    // the "logo"
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: 30
-        font.pixelSize: 30
-        color: "#e9e9e9"
-        text: "MultiSceneMultiLevel"
-    }
+//    // the "logo"
+//    Text {
+//        anchors.horizontalCenter: parent.horizontalCenter
+//        y: 30
+//        font.pixelSize: 30
+//        color: "#e9e9e9"
+//        text: "MultiSceneMultiLevel"
+//    }
 
     // menu
     Column {
@@ -49,5 +56,6 @@ SceneBase {
         anchors.bottom: menuScene.gameWindowAnchorItem.bottom
         anchors.bottomMargin: 10
     }
+
 }
 
