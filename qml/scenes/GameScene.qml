@@ -21,6 +21,12 @@ SceneBase {
         activeLevelFileName = fileName
     }
 
+    // for creating entities (enemy and bullets) at runtime dynamically
+    EntityManager {
+      id: entityManager
+      entityContainer: gameScene
+    }
+
     PhysicsWorld {
       // set no gravity, the collider is not physics-based
     }
@@ -42,6 +48,72 @@ SceneBase {
         height: 42
     }
 
+    // Boundaries to make it impossible for the player to leave the screen:
+    // left wall
+    Wall {height:parent.height+150; anchors.right:parent.left}
+    // right wall
+    Wall {height:parent.height+150; anchors.left:parent.right}
+    // ceiling
+    Wall {width:parent.width; anchors.bottom:parent.top}
+    // floor
+    Wall {width:parent.width; anchors.bottom:parent.bottom}
+
+    // Add one test enemy:
+    ShootingEnemy{
+        id: enemyShooter
+        x: 200
+        y: 200
+
+        BoxCollider{
+            id:enemyShooterBoxCollider
+            anchors.fill: enemyShooter
+            categories: Box.Category2
+            collidesWith: Box.Category1
+        }
+    }
+
+    // Add one test mine enemy
+    Mine{
+        id: mine
+        x: 200
+        y: 100
+
+        BoxCollider {
+          id: mineCollider
+          anchors.fill: mine
+          categories: Box.Category2
+          collidesWith: Box.Category1
+        }
+    }
+
+    // Add one test powerup
+    PowerUp{
+        id: powerup
+        x: 200
+        y: 250
+
+        BoxCollider {
+          id:powerupCollider
+          anchors.fill: powerup
+          categories: Box.Category4
+          collidesWith: Box.Category1
+        }
+    }
+
+    // Add one test rapidfire powerup
+    RapidFire{
+        id: rapidfire
+        x: 200
+        y: 150
+
+        BoxCollider {
+          id: rapdidfireCollider
+          anchors.fill: rapidfire
+          categories: Box.Category4
+          collidesWith: Box.Category1
+        }
+    }
+
     Player {
       id: player
       x: 100
@@ -50,6 +122,8 @@ SceneBase {
       BoxCollider {
           id: playerBoxCollider
           width: 32; height: 12
+          categories: Box.Category1
+          collidesWith: Box.Category2 | Box.Category3 | Box.Category4
       }
     }
 
@@ -57,14 +131,11 @@ SceneBase {
         id: twoAxisController
 
         Keys.onRightPressed: {
-          if(player.x <= 435)
              playerBoxCollider.linearVelocity = Qt.point(300,0)
         }
 
         Keys.onLeftPressed: {
-          if(player.x >= 10)
             playerBoxCollider.linearVelocity = Qt.point(-300,0)
-            console.debug(player.x)
         }
 
         Keys.onUpPressed: {
@@ -84,9 +155,7 @@ SceneBase {
                 console.debug("Shoot!")
             }
         }
-
     }
-
 
 //    // background
 //    Rectangle {
@@ -94,20 +163,20 @@ SceneBase {
 //        color: "#dd94da"
 //    }
 
-    // back button to leave scene
-    MenuButton {
-        text: "Back to menu"
-        // anchor the button to the gameWindowAnchorItem to be on the edge of the screen on any device
-        anchors.right: gameScene.gameWindowAnchorItem.right
-        anchors.rightMargin: 10
-        anchors.top: gameScene.gameWindowAnchorItem.top
-        anchors.topMargin: 10
-        onClicked: {
-            backButtonPressed()
-            activeLevel = undefined
-            activeLevelFileName = ""
-        }
-    }
+//    // back button to leave scene
+//    MenuButton {
+//        text: "Back to menu"
+//        // anchor the button to the gameWindowAnchorItem to be on the edge of the screen on any device
+//        anchors.right: gameScene.gameWindowAnchorItem.right
+//        anchors.rightMargin: 10
+//        anchors.top: gameScene.gameWindowAnchorItem.top
+//        anchors.topMargin: 10
+//        onClicked: {
+//            backButtonPressed()
+//            activeLevel = undefined
+//            activeLevelFileName = ""
+//        }
+//    }
 
 //    // name of the current level
 //    Text {

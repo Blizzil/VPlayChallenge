@@ -52,9 +52,9 @@ SceneBase {
         width: 60
         height: 60
         anchors.right: menuScene.gameWindowAnchorItem.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: 2
         anchors.bottom: menuScene.gameWindowAnchorItem.bottom
-        anchors.bottomMargin: 10
+        anchors.bottomMargin: 1
     }
 
 }

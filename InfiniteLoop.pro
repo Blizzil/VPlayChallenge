@@ -35,5 +35,11 @@ ios {
 }
 
 DISTFILES += \
-    qml/Player.qml
+    qml/Player.qml \
+    qml/Wall.qml \
+    assets/img/enemyShooting.png \
+    qml/ShootingEnemy.qml \
+    qml/PowerUp.qml \
+    qml/RapidFire.qml \
+    qml/Mine.qml
 
