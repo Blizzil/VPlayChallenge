@@ -15,6 +15,9 @@ SceneBase {
     property int countdown: 0
     // flag indicating if game is running
     property bool gameRunning: countdown == 0
+    // paused
+    property bool isPaused: false
+    property int tenSecondCountdown: 10
 
     // set the name of the current level, this will cause the Loader to load the corresponding level
     function setLevel(fileName) {
@@ -41,12 +44,55 @@ SceneBase {
         height: 320
     }
 
+    // Time and Score Display
+    // ------------------------------------------------------
+
     Image {
+        id: uiDisplay
         source: "../../assets/img/ui.png"
         anchors.horizontalCenter: gameScene.horizontalCenter
         width: 90
         height: 42
     }
+
+    Image {
+        id: timeAlarm
+        source: "../../assets/img/alarm.png"
+        width: 28
+        height: 25.5
+        x: 204
+        y: 14
+        z: -1 // 0
+
+
+    }
+
+    Text {
+        x: 209
+        y: 15
+        font.pixelSize: 7
+        color: "#dcac97"
+        text: "Time:"
+    }
+
+    Text {
+        x: 214
+        y: 24
+        font.pixelSize: 10
+        font.bold: true
+        color: "#dcac97"
+        text: tenSecondCountdown
+    }
+
+    Text {
+        x: 253
+        y: 15
+        font.pixelSize: 7
+        color: "#dcac97"
+        text: "Score:"
+    }
+
+
 
     // Boundaries to make it impossible for the player to leave the screen:
     // left wall
@@ -97,6 +143,11 @@ SceneBase {
           anchors.fill: powerup
           categories: Box.Category4
           collidesWith: Box.Category1
+          collisionTestingOnlyMode: true
+
+//          fixture.onBeginContact: {
+
+//          }
         }
     }
 
@@ -127,6 +178,15 @@ SceneBase {
       }
     }
 
+    Image{
+        id: pauseScreen
+        source: "../../assets/img/pauseMenu.png"
+        anchors.horizontalCenter: gameScene.horizontalCenter
+        width: 480
+        height: 320
+        z: -100
+    }
+
     TwoAxisController {
         id: twoAxisController
 
@@ -153,6 +213,39 @@ SceneBase {
         Keys.onPressed: {
             if(event.key === Qt.Key_Control){
                 console.debug("Shoot!")
+            }
+            // Check if the player want´s to pause the game:
+            else if(event.key === Qt.Key_P){
+
+                if(isPaused === false){
+                    isPaused = true
+                    pauseScreen.z = 100
+                    if(tenSecondCountdown > 0)
+                        tenSecondTimer.stop()
+                }
+                else{
+                    isPaused = false
+                    pauseScreen.z = -100
+                    if(tenSecondCountdown > 0)
+                        tenSecondTimer.start()
+                }
+            }
+        }
+    }
+
+    // if the countdown is greater than 0, this timer is triggered every second, decreasing the countdown (until it hits 0 again)
+    Timer {
+        id: tenSecondTimer
+        repeat: true
+        running: tenSecondCountdown > 0
+        onTriggered: {
+            tenSecondCountdown--
+
+            if(tenSecondCountdown <= 3 && timeAlarm.z == -1){
+                timeAlarm.z = 0
+            }
+            else if(tenSecondCountdown > 3 && timeAlarm.z == 0){
+                timeAlarm.z = -1
             }
         }
     }
@@ -203,6 +296,8 @@ SceneBase {
             activeLevel = item
             // restarts the countdown
             countdown = 3
+            // SET THE TIME COUNTDOWN
+            tenSecondCountdown = 10
         }
     }
 
@@ -237,13 +332,13 @@ SceneBase {
 //        text: countdown > 0 ? countdown : "tap!"
 //    }
 
-    // if the countdown is greater than 0, this timer is triggered every second, decreasing the countdown (until it hits 0 again)
-    Timer {
-        repeat: true
-        running: countdown > 0
-        onTriggered: {
-            countdown--
-        }
-    }
+//    // if the countdown is greater than 0, this timer is triggered every second, decreasing the countdown (until it hits 0 again)
+//    Timer {
+//        repeat: true
+//        running: countdown > 0
+//        onTriggered: {
+//            countdown--
+//        }
+//    }
 }
 

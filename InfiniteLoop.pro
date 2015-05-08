@@ -41,5 +41,6 @@ DISTFILES += \
     qml/ShootingEnemy.qml \
     qml/PowerUp.qml \
     qml/RapidFire.qml \
-    qml/Mine.qml
+    qml/Mine.qml \
+    qml/scenes/HighscoreScene.qml
 
