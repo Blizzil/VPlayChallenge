@@ -42,5 +42,6 @@ DISTFILES += \
     qml/PowerUp.qml \
     qml/RapidFire.qml \
     qml/Mine.qml \
-    qml/scenes/HighscoreScene.qml
+    qml/scenes/HighscoreScene.qml \
+    qml/PlayerBullet.qml
 

@@ -45,7 +45,7 @@ SceneBase {
     }
 
     // Time and Score Display
-    // ------------------------------------------------------
+    // ------------------------------------------------------------
 
     Image {
         id: uiDisplay
@@ -63,8 +63,6 @@ SceneBase {
         x: 204
         y: 14
         z: -1 // 0
-
-
     }
 
     Text {
@@ -92,9 +90,9 @@ SceneBase {
         text: "Score:"
     }
 
-
-
     // Boundaries to make it impossible for the player to leave the screen:
+    // ------------------------------------------------------------------------
+
     // left wall
     Wall {height:parent.height+150; anchors.right:parent.left}
     // right wall
@@ -103,67 +101,6 @@ SceneBase {
     Wall {width:parent.width; anchors.bottom:parent.top}
     // floor
     Wall {width:parent.width; anchors.bottom:parent.bottom}
-
-    // Add one test enemy:
-    ShootingEnemy{
-        id: enemyShooter
-        x: 200
-        y: 200
-
-        BoxCollider{
-            id:enemyShooterBoxCollider
-            anchors.fill: enemyShooter
-            categories: Box.Category2
-            collidesWith: Box.Category1
-        }
-    }
-
-    // Add one test mine enemy
-    Mine{
-        id: mine
-        x: 200
-        y: 100
-
-        BoxCollider {
-          id: mineCollider
-          anchors.fill: mine
-          categories: Box.Category2
-          collidesWith: Box.Category1
-        }
-    }
-
-    // Add one test powerup
-    PowerUp{
-        id: powerup
-        x: 200
-        y: 250
-
-        BoxCollider {
-          id:powerupCollider
-          anchors.fill: powerup
-          categories: Box.Category4
-          collidesWith: Box.Category1
-          collisionTestingOnlyMode: true
-
-//          fixture.onBeginContact: {
-
-//          }
-        }
-    }
-
-    // Add one test rapidfire powerup
-    RapidFire{
-        id: rapidfire
-        x: 200
-        y: 150
-
-        BoxCollider {
-          id: rapdidfireCollider
-          anchors.fill: rapidfire
-          categories: Box.Category4
-          collidesWith: Box.Category1
-        }
-    }
 
     Player {
       id: player
@@ -187,6 +124,46 @@ SceneBase {
         z: -100
     }
 
+    // Components
+    // ------------------------------------------------------------------------
+
+    Component{
+        id: playerBullet
+
+        PlayerBullet{
+        }
+    }
+
+    Component{
+        id: enemyShooter
+
+        ShootingEnemy{
+        }
+    }
+
+    Component{
+        id: mine
+
+        Mine{
+        }
+    }
+
+    Component{
+        id: powerup
+
+        PowerUp{
+        }
+    }
+
+    Component{
+        id: rapidfire
+
+        RapidFire{
+        }
+    }
+
+    // Player Controller
+    // ----------------------------------------------------------------
     TwoAxisController {
         id: twoAxisController
 
@@ -211,10 +188,28 @@ SceneBase {
         }
 
         Keys.onPressed: {
+            // Shooting
+            // ----------------------------------------------------------------
             if(event.key === Qt.Key_Control){
-                console.debug("Shoot!")
+
+                var offset = Qt.point(player.x + 60, player.y + 30)
+
+                // Determine where we wish to shoot the projectile to
+                var realX = gameScene.gameWindowAnchorItem.width
+                var ratio = offset.y / offset.x
+                var realY = (realX * ratio) + player.y
+                var destination = Qt.point(realX, realY)
+
+                // Determine the length of how far we're shooting
+                var offReal = Qt.point(realX - player.x, realY - player.y)
+                var length = gameScene.width
+                var velocity = 480 // speed of the projectile should be 480pt per second
+                var realMoveDuration = length / velocity * 1000 // multiply by 1000 because duration of projectile is in milliseconds
+
+                entityManager.createEntityFromComponentWithProperties(playerBullet, {"destination": destination, "moveDuration": realMoveDuration})
             }
-            // Check if the player want´s to pause the game:
+            // Pause Game
+            // ----------------------------------------------------------------
             else if(event.key === Qt.Key_P){
 
                 if(isPaused === false){
@@ -248,6 +243,42 @@ SceneBase {
                 timeAlarm.z = -1
             }
         }
+    }
+
+    // Add Enemies & PowerUps
+    // ----------------------------------------------------------------
+    Timer {
+      running: gameScene.visible == true
+      repeat: true
+      interval: 1000
+      onTriggered: addTarget()
+    }
+
+    Timer {
+      running: gameScene.visible == true
+      repeat: true
+      interval: 2500
+      onTriggered: addPowerUp()
+    }
+
+    Timer {
+      running: gameScene.visible == true
+      repeat: true
+      interval: 3000
+      onTriggered: addRapidFire()
+    }
+
+    function addTarget() {
+      entityManager.createEntityFromComponent(enemyShooter)
+      entityManager.createEntityFromComponent(mine)
+    }
+
+    function addPowerUp(){
+        entityManager.createEntityFromComponent(powerup)
+    }
+
+    function addRapidFire(){
+      entityManager.createEntityFromComponent(rapidfire)
     }
 
 //    // background

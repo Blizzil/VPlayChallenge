@@ -19,4 +19,15 @@ EntityBase {
     categories: Box.Category4
     collidesWith: Box.Category1
   }
+
+  // Movement:
+  // --------------------------------------------------------------
+
+  y: utils.generateRandomValueBetween(42, gameScene.height-30)
+
+  NumberAnimation on x{
+    from: gameScene.width // start at the right side
+    to: -powerupImage.width // move it to the left side of the screen
+    duration: utils.generateRandomValueBetween(2000, 4000) // vary animation duration between 2-4 seconds for the 480 px scene width
+  }
 }
