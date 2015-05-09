@@ -18,6 +18,17 @@ EntityBase {
     anchors.fill: powerup
     categories: Box.Category4
     collidesWith: Box.Category1
+
+//    fixture.onBeginContact: {
+
+//        var collidedEntity = other.parent.parent.parent
+//        console.debug("collided with entity", collidedEntity.entityType)
+
+//        if(collidedEntity.entityType === "player") {
+//          tenSecondCountdown+=3 // increase time limit
+//          removeEntity() // remove the powerUp
+//        }
+//     }
   }
 
   // Movement:

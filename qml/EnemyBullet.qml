@@ -3,12 +3,12 @@ import QtQuick 2.0
 import "..//qml//scenes"
 
 EntityBase {
-  id: playerBullet
+  id: enemyBullet
   entityType: "projectile"
 
   Image {
-    id: playerBulletImage
-    source: "../assets/img/Bullet.png"
+    id: enemyBulletImage
+    source: "../assets/img/EnemyBullet.png"
     width: 8
     height: 2.5
   }
@@ -16,19 +16,15 @@ EntityBase {
   property int moveDuration : 1
 
   PropertyAnimation on x {
-    from: player.x + 30
-    to: gameScene.width
+    from: enemyShooter.x
+    to: -enemyBulletImage.width
     duration: moveDuration
   }
 
-  PropertyAnimation on y {
-    from: player.y + 7
-    to: player.y
-    duration: moveDuration
-  }
+  y : enemyShooter.y
 
   BoxCollider {
-    anchors.fill: playerBulletImage
+    anchors.fill: enemyBulletImage
     collisionTestingOnlyMode: true
   }
 }

@@ -1,5 +1,6 @@
 import VPlay 2.0
 import QtQuick 2.0
+import "../qml"
 
 EntityBase {
   id: enemyShooter
@@ -30,18 +31,36 @@ EntityBase {
     //collisionTestingOnlyMode: true // use Box2D only for collision detection, move the entity with the NumberAnimation above
     categories: Box.Category2
     collidesWith: Box.Category1
-
-//      // if the collided type was a projectile, both can be destroyed and the player gets a point
-//      var collidedEntity = other.parent.parent.parent
-//      console.debug("collided with entity", collidedEntity.entityType)
-//      // monsters could also collide with other monsters because they have a random speed - alternatively, collider categories could be used
-//      if(collidedEntity.entityType === "projectile") {
-//        monstersDestroyed++
-//        // remove the projectile entity
-//        collidedEntity.removeEntity()
-//        // remove the monster
-//        removeEntity()
-//      }
   }
 
+//  // Shooting:
+//  // --------------------------------------------------------------
+
+//  Timer {
+//    running: gameScene.visible == true
+//    repeat: true
+//    interval: 1000
+//    onTriggered: enemyShot()
+//  }
+
+//  function enemyShot(){
+
+//      console.log("--- ENEMY SHOT ---")
+
+//          var offset = Qt.point(enemyShooter.x - 60, enemyShooter.y - 30)
+
+//          // Determine where we wish to shoot the projectile to
+//          var realX = gameScene.gameWindowAnchorItem.width
+//          var ratio = offset.y / offset.x
+//          var realY = (realX * ratio) + enemyShooter.y
+//          var destination = Qt.point(realX, realY)
+
+//          // Determine the length of how far we're shooting
+//          var offReal = Qt.point(realX - enemyShooter.x, realY - enemyShooter.y)
+//          var length = gameScene.width
+//          var velocity = 480 // speed of the projectile should be 480pt per second
+//          var realMoveDuration = length / velocity * 1000 // multiply by 1000 because duration of projectile is in milliseconds
+
+//          entityManager.createEntityFromComponentWithProperties(enemyBullet, {"destination": destination, "moveDuration": realMoveDuration})
+//  }
 }

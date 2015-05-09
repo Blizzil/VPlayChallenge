@@ -43,5 +43,6 @@ DISTFILES += \
     qml/RapidFire.qml \
     qml/Mine.qml \
     qml/scenes/HighscoreScene.qml \
-    qml/PlayerBullet.qml
+    qml/PlayerBullet.qml \
+    qml/EnemyBullet.qml
 

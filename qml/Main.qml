@@ -25,7 +25,7 @@ GameWindow {
 
         // listen to the button signals of the scene and change the state according to it
         onSelectLevelPressed: window.state = "selectLevel"
-        onCreditsPressed: window.state = "credits"
+        onCreditsPressed: window.state = "highscore"
         // the menu scene is our start scene, so if back is pressed there we ask the user if he wants to quit the application
         onBackButtonPressed: {
             nativeUtils.displayMessageBox(qsTr("Really quit the game?"), "", 2);
@@ -59,6 +59,12 @@ GameWindow {
         onBackButtonPressed: window.state = "menu"
     }
 
+    // highscore scene
+    HighscoreScene {
+        id: highscoreScene
+        //onBackButtonPressed: window.state = "highscore"
+    }
+
     // game scene to play a level
     GameScene {
         id: gameScene
@@ -82,9 +88,9 @@ GameWindow {
             PropertyChanges {target: window; activeScene: selectLevelScene}
         },
         State {
-            name: "credits"
-            PropertyChanges {target: creditsScene; opacity: 1}
-            PropertyChanges {target: window; activeScene: creditsScene}
+            name: "highscore"
+            PropertyChanges {target: highscoreScene; opacity: 1}
+            PropertyChanges {target: window; activeScene: highscoreScene}
         },
         State {
             name: "game"

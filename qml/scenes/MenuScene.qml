@@ -23,6 +23,13 @@ SceneBase {
         height: 320
     }
 
+    Keys.onPressed: {
+
+        if(event.key === Qt.Key_Space){
+            window.state = "game"
+        }
+    }
+
 //    // the "logo"
 //    Text {
 //        anchors.horizontalCenter: parent.horizontalCenter
@@ -32,19 +39,19 @@ SceneBase {
 //        text: "MultiSceneMultiLevel"
 //    }
 
-    // menu
-    Column {
-        anchors.centerIn: parent
-        spacing: 10
-        MenuButton {
-            text: "Levels"
-            onClicked: selectLevelPressed()
-        }
-        MenuButton {
-            text: "Credits"
-            onClicked: creditsPressed()
-        }
-    }
+//    // menu
+//    Column {
+//        anchors.centerIn: parent
+//        spacing: 10
+//        MenuButton {
+//            text: "Levels"
+//            onClicked: selectLevelPressed()
+//        }
+//        MenuButton {
+//            text: "Credits"
+//            onClicked: creditsPressed()
+//        }
+//    }
 
     // a little V-Play logo is always nice to have, right?
     Image {

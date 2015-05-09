@@ -18,6 +18,17 @@ EntityBase {
     anchors.fill: rapidfire
     categories: Box.Category4
     collidesWith: Box.Category1
+
+//    fixture.onBeginContact: {
+
+//        var collidedEntity = other.parent.parent.parent
+//        console.debug("collided with entity", collidedEntity.entityType)
+
+//        if(collidedEntity.entityType === "player") {
+//          // TODO: activate double shot
+//          removeEntity() // remove the powerUp
+//        }
+//     }
   }
 
   // Movement:

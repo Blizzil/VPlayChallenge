@@ -10,7 +10,7 @@ SceneBase {
     // the currently loaded level gets stored here
     property variant activeLevel
     // score
-    property int score: 0
+    property int highScore: 0
     // countdown shown at level start
     property int countdown: 0
     // flag indicating if game is running
@@ -142,6 +142,13 @@ SceneBase {
     }
 
     Component{
+        id: enemyBullet
+
+        EnemyBullet{
+        }
+    }
+
+    Component{
         id: mine
 
         Mine{
@@ -192,7 +199,7 @@ SceneBase {
             // ----------------------------------------------------------------
             if(event.key === Qt.Key_Control){
 
-                var offset = Qt.point(player.x + 60, player.y + 30)
+                var offset = Qt.point(player.x, player.y)
 
                 // Determine where we wish to shoot the projectile to
                 var realX = gameScene.gameWindowAnchorItem.width
@@ -208,7 +215,7 @@ SceneBase {
 
                 entityManager.createEntityFromComponentWithProperties(playerBullet, {"destination": destination, "moveDuration": realMoveDuration})
             }
-            // Pause Game
+            // Pause Game (TODO: Really pause the game)
             // ----------------------------------------------------------------
             else if(event.key === Qt.Key_P){
 
@@ -218,7 +225,12 @@ SceneBase {
                     if(tenSecondCountdown > 0)
                         tenSecondTimer.stop()
                 }
-                else{
+            }
+            // Resume Game
+            // ----------------------------------------------------------------
+            else if(event.key === Qt.Key_Space){
+
+                if(isPaused === true){
                     isPaused = false
                     pauseScreen.z = -100
                     if(tenSecondCountdown > 0)
@@ -232,8 +244,9 @@ SceneBase {
     Timer {
         id: tenSecondTimer
         repeat: true
-        running: tenSecondCountdown > 0
+        running: activeScene === gameScene && tenSecondCountdown >= 0
         onTriggered: {
+
             tenSecondCountdown--
 
             if(tenSecondCountdown <= 3 && timeAlarm.z == -1){
@@ -242,27 +255,31 @@ SceneBase {
             else if(tenSecondCountdown > 3 && timeAlarm.z == 0){
                 timeAlarm.z = -1
             }
+            else if(tenSecondCountdown == 0){
+                timeAlarm.z = -1
+                window.state = "highscore"
+            }
         }
     }
 
     // Add Enemies & PowerUps
     // ----------------------------------------------------------------
     Timer {
-      running: gameScene.visible == true
+      running: activeScene === gameScene
       repeat: true
       interval: 1000
-      onTriggered: addTarget()
+      onTriggered: addTarget() | enemyShot()
     }
 
     Timer {
-      running: gameScene.visible == true
+      running: activeScene === gameScene
       repeat: true
       interval: 2500
       onTriggered: addPowerUp()
     }
 
     Timer {
-      running: gameScene.visible == true
+      running: activeScene === gameScene
       repeat: true
       interval: 3000
       onTriggered: addRapidFire()
@@ -279,6 +296,28 @@ SceneBase {
 
     function addRapidFire(){
       entityManager.createEntityFromComponent(rapidfire)
+    }
+
+    function enemyShot(){
+
+        console.log("--- ENEMY SHOT ---")
+        console.log(enemyBullet.x)
+
+            var offset = Qt.point(enemyShooter.x - 60, enemyShooter.y - 30)
+
+            // Determine where we wish to shoot the projectile to
+            var realX = gameScene.gameWindowAnchorItem.width
+            var ratio = offset.y / offset.x
+            var realY = (realX * ratio) + enemyShooter.y
+            var destination = Qt.point(realX, realY)
+
+            // Determine the length of how far we're shooting
+            var offReal = Qt.point(realX - enemyShooter.x, realY - enemyShooter.y)
+            var length = gameScene.width
+            var velocity = 480 // speed of the projectile should be 480pt per second
+            var realMoveDuration = length / velocity * 1000 // multiply by 1000 because duration of projectile is in milliseconds
+
+            entityManager.createEntityFromComponentWithProperties(enemyBullet, {"destination": destination, "moveDuration": realMoveDuration})
     }
 
 //    // background
@@ -319,7 +358,7 @@ SceneBase {
         source: activeLevelFileName != "" ? "../levels/" + activeLevelFileName : ""
         onLoaded: {
             // reset the score
-            score = 0
+            highScore = 0
             // since we did not define a width and height in the level item itself, we are doing it here
             item.width = gameScene.width
             item.height = gameScene.height
@@ -340,7 +379,7 @@ SceneBase {
         onRectanglePressed: {
             // only increase score when game is running
             if(gameRunning) {
-                score++
+                highScore++
             }
         }
     }
