@@ -15,7 +15,7 @@ SceneBase {
     Keys.onPressed: {
 
         if(event.key === Qt.Key_Space){
-            // TODO Reset gameScene
+            // reset player position
             gameScene.tenSecondCountdown += 10
             window.state = "game"
         }

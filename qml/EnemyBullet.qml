@@ -15,13 +15,13 @@ EntityBase {
 
   property int moveDuration : 1
 
-  PropertyAnimation on x {
-    from: enemyShooter.x
-    to: -enemyBulletImage.width
-    duration: moveDuration
-  }
+//  PropertyAnimation on x {
+//    from: enemyShooter.x
+//    to: -enemyBulletImage.width
+//    duration: moveDuration
+//  }
 
-  y : enemyShooter.y
+//  y : enemyShooter.y
 
   BoxCollider {
     anchors.fill: enemyBulletImage

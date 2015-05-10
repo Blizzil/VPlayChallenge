@@ -34,7 +34,7 @@ EntityBase {
   // Movement:
   // --------------------------------------------------------------
 
-  y: utils.generateRandomValueBetween(42, gameScene.height-30)
+  y: utils.generateRandomValueBetween(42, gameScene.height-30)  // y is random and stays the same
 
   NumberAnimation on x{
     from: gameScene.width // start at the right side

@@ -16,13 +16,13 @@ EntityBase {
   property int moveDuration : 1
 
   PropertyAnimation on x {
-    from: player.x + 30
+    from: player.x + 30 // bullet should appear in front of the player
     to: gameScene.width
     duration: moveDuration
   }
 
   PropertyAnimation on y {
-    from: player.y + 7
+    from: player.y + 7 // bullet should appear in front of the player
     to: player.y
     duration: moveDuration
   }
